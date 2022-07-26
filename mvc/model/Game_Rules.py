@@ -6,7 +6,8 @@ from mvc.model.Players import Players
 class Game_Rules:
     """ Rules of the game that may be changed in the future
     """
-    DIRECTIONS = [(1, 0), (0, 1), (-1, 0), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
+    DIRECTIONS = [(1, 0), (0, 1), (-1, 0), (0, -1), (1, 1),   (-1, -1),  (1, -1),   (-1, 1)]
+                #  down    right     up     left   down-right  up-left  down-left   up-right
     
     def __init__(self) -> None:
         pass
@@ -25,11 +26,12 @@ class Game_Rules:
                 raise InvalidMoveError
             if not (0 <= move[0] < board.size and 0 <= move[1] < board.size):
                 raise InvalidCoordRangeStepError
+
             for direction in self.DIRECTIONS:
                 if self.check_direction(board, move, direction, player):
                     return True
             raise InvalidMoveError
-            # return board.mat[move[0]][move[1]] == Board.EMPTY_CELL
+
         except InvalidCoordRangeStepError:
             print()
             print("Move out of range!")
@@ -65,10 +67,12 @@ class Game_Rules:
             if not (0 <= x < board.size and 0 <= y < board.size):
                 return False
             mat_pos = board.mat[x][y]
-            if mat_pos == player.game_piece:
-                return True
             if mat_pos != player.game_piece:
                 if mat_pos == board.EMPTY_CELL:
                     return False
                 else:
-                    continue
+                    # have to check the next cell to see if there is piece of the same color
+                    return True
+            if mat_pos == player.game_piece:
+                return False
+
