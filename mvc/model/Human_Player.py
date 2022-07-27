@@ -4,10 +4,15 @@ from mvc.model.Game_Piece import Game_Piece
 from mvc.model.Game_Rules import Game_Rules
 
 class HumanPlayer(Players):
-    def __init__(self):
+    def __init__(self, game_piece: Game_Piece):
         super().__init__()
-        self.game_piece = Game_Piece.X
+        self.game_piece = game_piece
         self.game_rules = Game_Rules()
+
+    # def __init__(self):
+    #     super().__init__()
+    #     self.game_piece = Game_Piece.X
+    #     self.game_rules = Game_Rules()
 
     def make_move(self, board: Board, move: tuple):
         """Makes a move on the board
