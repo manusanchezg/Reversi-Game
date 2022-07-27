@@ -1,3 +1,5 @@
+from mvc.model.Game_Piece import Game_Piece
+
 class Board:
     """The board of the game. Can be any size (NxN), the default size is 8*8
     """
@@ -27,6 +29,34 @@ class Board:
                 if cell == self.EMPTY_CELL:
                     return False
         return True
+
+    def check_pieces(self):
+        """Check if there are both player pieces
+        
+        Returns:
+            bool: True if there are both player pieces, False otherwise"""
+        pieces = {"X": 0, "O": 0}
+        for row in self.mat:
+            for cell in row:
+                if Game_Piece.X == cell:
+                    pieces["X"] += 1
+                else:
+                    pieces["O"] += 1
+        if pieces["X"] == 0:
+            print("No X pieces")
+            print("Game over, O wins")
+        elif pieces["O"] == 0:
+            print("No O pieces")
+            print("Game over, X wins")
+        else:
+            return True
+
+    def flip_game_piece(self, game_piece, move: tuple):
+        x, y = move
+        if game_piece != Game_Piece.X:
+            self.set_cell(x, y, Game_Piece.O)
+        else:
+            self.set_cell(x, y, Game_Piece.X)
 
     # Just for testing
     def __str__(self):

@@ -26,15 +26,16 @@ class StartGame:
         self.board.set_cell(3, 3, Game_Piece.O)
         while True:
             # not very scalable, but it works
-            BoardConsoleView(self.board).draw()
-            move = input("Player 1, make your move (row, col): ")
-            self.player1.make_move(self.board, move)
-            self.game_rules.flip_pieces(self.board, move, self.player1)
-            self.game.change_players()
-            BoardConsoleView(self.board).draw()
-            move = input("Player 2, make your move (row, col): ")
-            self.player2.make_move(self.board, move)
-            self.game_rules.flip_pieces(self.board, move, self.player2)
-            self.game.change_players()
+            if not self.game_rules.is_game_over(self.board):
+                BoardConsoleView(self.board).draw()
+                move = input("Player 1, make your move (row, col): ")
+                self.player1.make_move(self.board, move)
+                self.game_rules.flip_pieces(self.board, move, self.player1)
+                self.game.change_players()
+                BoardConsoleView(self.board).draw()
+                move = input("Player 2, make your move (row, col): ")
+                self.player2.make_move(self.board, move)
+                self.game_rules.flip_pieces(self.board, move, self.player2)
+                self.game.change_players()
 
         

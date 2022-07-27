@@ -17,10 +17,3 @@ class Game:
             self.current_player = self.player2
         else:
             self.current_player = self.player1 
-
-    def flip_game_piece(self, game_piece, move: tuple):
-        x, y = move
-        if game_piece == Game_Piece.X:
-            self.board.set_cell(x, y, Game_Piece.O)
-        else:
-            self.board.set_cell(x, y, Game_Piece.X)
