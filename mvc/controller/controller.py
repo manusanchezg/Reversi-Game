@@ -11,12 +11,7 @@ class StartGame:
         self.board = board
         self.player1 = player1
         self.player2 = player2
-        self.current_player = player1
-        self.turn = 1
-        self.winner = None
-        self.game_over = False
-        self.game_pieces = 2
-        self.game = game
+        self.current_player = self.player1
         self.game_rules = game_rules
 
     def start(self):
@@ -27,15 +22,17 @@ class StartGame:
         while True:
             # not very scalable, but it works
             if not self.game_rules.is_game_over(self.board):
+                player = self.current_player.player_name
                 BoardConsoleView(self.board).draw()
-                move = input("Player 1, make your move (row, col): ")
-                self.player1.make_move(self.board, move)
-                self.game_rules.flip_pieces(self.board, move, self.player1)
-                self.game.change_players()
-                BoardConsoleView(self.board).draw()
-                move = input("Player 2, make your move (row, col): ")
-                self.player2.make_move(self.board, move)
-                self.game_rules.flip_pieces(self.board, move, self.player2)
-                self.game.change_players()
+                move = input(f"{player}, make your move (row, col): ")
+                self.game_rules.flip_pieces(self.board, move, self.current_player)
+                self.change_players()
+
+    def change_players(self):
+        if self.current_player == self.player1:
+            self.current_player = self.player2
+        else:
+            self.current_player = self.player1 
+                
 
         

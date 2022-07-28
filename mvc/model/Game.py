@@ -11,9 +11,3 @@ class Game:
             self.player2 = AI
         else: 
             self.player2 = player2
-
-    def change_players(self):
-        if self.current_player == self.player1:
-            self.current_player = self.player2
-        else:
-            self.current_player = self.player1 

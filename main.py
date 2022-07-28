@@ -10,9 +10,8 @@ Player2 = HumanPlayer(Game_Piece.O)
 game_rules = Game_Rules()
 
 board = Board()
-game = Game(board, Player1, Player2)
 
 
 
-game = StartGame(board, player1=Player1, player2=Player2, game=game, game_rules=game_rules)
+game = StartGame(board, player1=Player1, player2=Player2, game_rules=game_rules)
 game.start()

@@ -8,6 +8,7 @@ class HumanPlayer(Players):
         super().__init__()
         self.game_piece = game_piece
         self.game_rules = Game_Rules()
+        self.player_name = self.show_player()
 
     def make_move(self, board: Board, move: tuple):
         """Makes a move on the board
@@ -20,3 +21,9 @@ class HumanPlayer(Players):
         move = move[0] - 1, move[1] - 1
         if self.game_rules.is_valid_move(board, move, self):
             board.set_cell(move[0], move[1], self.game_piece)
+
+    def show_player(self):
+        if self.game_piece == Game_Piece.X:
+            return "Player 1"
+        else:
+            return "Player 2"
