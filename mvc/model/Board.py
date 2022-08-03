@@ -22,8 +22,6 @@ class Board:
         self.mat[row][col] = player
     
     def is_full(self):
-        """Check if the board is full
-        """
         for row in self.mat:
             for cell in row:
                 if cell == self.EMPTY_CELL:

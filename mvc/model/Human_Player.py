@@ -17,8 +17,7 @@ class HumanPlayer(Players):
             board (Board): The board to make the move on
             move (tuple): The position to make the move on
         """
-        move = tuple(map(int, move.split(",")))
-        move = move[0] - 1, move[1] - 1
+        # if the move is valid, make the move
         if self.game_rules.is_valid_move(board, move, self):
             board.set_cell(move[0], move[1], self.game_piece)
 

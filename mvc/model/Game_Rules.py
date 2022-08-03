@@ -117,13 +117,20 @@ class Game_Rules:
             if mat_pos == player.game_piece:
                 return False
 
+    def flip_pieces(self, board: Board, move: tuple, player: Players) -> None:
+        """Flips the pieces in a certain direction
+        Args:
+            board (Board): The board to flip the pieces on
+            move (tuple): The move to flip the pieces in
+            player (Players): The player to flip the pieces for
+        """
+        for direction in self.DIRECTIONS:
+            if self.check_flipping(board, move, direction, player):
+                self.flip_pieces_in_direction(board, move, direction, player)
+
     
     def check_flipping(self, board: Board, move: tuple, direction: tuple, player: Players) -> bool:
-        """Checks if the move is valid in a certain direction
-        Args:
-            board (Board): The board to check the move on
-            move (tuple): The move to check
-            direction (tuple): The direction to check
+        """Checks if it has to keep flipping pieces
         Returns:
             bool: True if the move is valid, False otherwise
         """
@@ -157,19 +164,6 @@ class Game_Rules:
 
             if mat_pos == player.game_piece:
                 return False
-
-    def flip_pieces(self, board: Board, move: tuple, player: Players) -> None:
-        """Flips the pieces in a certain direction
-        Args:
-            board (Board): The board to flip the pieces on
-            move (tuple): The move to flip the pieces in
-            player (Players): The player to flip the pieces for
-        """
-        move = tuple(map(int, move.split(",")))
-        move = move[0] - 1, move[1] - 1
-        for direction in self.DIRECTIONS:
-            if self.check_flipping(board, move, direction, player):
-                self.flip_pieces_in_direction(board, move, direction, player)
     
     def flip_pieces_in_direction(self, board: Board, move: tuple, direction: tuple, player: Players) -> None:
         """Flips the pieces in a certain direction
