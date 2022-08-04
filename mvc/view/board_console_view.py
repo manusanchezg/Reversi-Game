@@ -26,3 +26,11 @@ class BoardConsoleView(BoardView):
     def display_game_over(self, winner):
         super().display_game_over()
         print(f"The winner is {winner}")
+
+    def display_choose_player(self):
+        print("Please choose a player:")
+        print("1. Human Player")
+        print("2. Computer Player (easy)")
+        # print("3. Computer Player (hard)")
+        choice = input("Your choice: ")
+        return choice
