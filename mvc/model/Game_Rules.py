@@ -1,5 +1,4 @@
 from mvc.model.Board import Board
-from mvc.model.Errors import InvalidCoordRangeStepError, InvalidMoveError
 from mvc.model.Game_Piece import Game_Piece
 from mvc.model.Players import Players
 
@@ -10,7 +9,7 @@ class Game_Rules:
                 #  down    right     up     left   down-right  up-left  down-left   up-right
     
     def __init__(self) -> None:
-        self.winner = None
+        pass
 
     def is_valid_move(self, board: Board, move: tuple, player: Players) -> bool:
         """Checks wether the move is valid or not
@@ -20,29 +19,19 @@ class Game_Rules:
         Returns:
             bool: True if the move is valid, False otherwise
         """
-        try:
-            # position in the matrix given by the user
-            mat_pos = board.mat[move[0]][move[1]]
+        # position in the matrix given by the user
+        mat_pos = board.mat[move[0]][move[1]]
 
-            if mat_pos != board.EMPTY_CELL:
-                raise InvalidMoveError
-            if not (0 <= move[0] < board.size and 0 <= move[1] < board.size):
-                raise InvalidCoordRangeStepError
+        if mat_pos != board.EMPTY_CELL:
+            return False
+        if not (0 <= move[0] < board.size and 0 <= move[1] < board.size):
+            return False
 
-            # check if the move is valid in all directions
-            for direction in self.DIRECTIONS:
-                if self.check_direction(board, move, direction, player):
-                    return True
-            raise InvalidMoveError
-
-        except InvalidCoordRangeStepError:
-            print()
-            print("Move out of range!")
-            print()
-        except InvalidMoveError:
-            print()
-            print("Invalid move!")
-            print()
+        # check if the move is valid in all directions
+        for direction in self.DIRECTIONS:
+            if self.check_direction(board, move, direction, player):
+                return True
+        return False
 
     def is_game_over(self, board: Board) -> bool:
         """Checks if there is any space left in the board to keep playing
@@ -52,34 +41,31 @@ class Game_Rules:
             bool: True if there is space left, False otherwise
         """
         pieces = {"X": 0, "O": 0}
-        if board.is_full():
-            for row in board.mat:
-                for cell in row:
-                    if Game_Piece.X == cell:
-                        pieces["X"] += 1
-                    else:
-                        pieces["O"] += 1
-            
-            if pieces["X"] == 0:
-                print("No X pieces")
-                self.winner = Game_Piece.O
-                print("Game over, O wins")
-            elif pieces["O"] == 0:
-                print("No O pieces")
-                self.winner = Game_Piece.X
-                print("Game over, X wins")
+        # count the number of pieces in the board
+        for row in board.mat:
+            for cell in row:
+                if Game_Piece.X == cell:
+                    pieces["X"] += 1
+                elif Game_Piece.O == cell:
+                    pieces["O"] += 1
+
+        if board.is_full():    
             if pieces["X"] == pieces["O"]:
                 print("It's a tie!")
                 return True
             elif pieces["X"] > pieces["O"]:
-                print("X wins!")
-                self.winner = Game_Piece.X
+                self.get_winner(board, Game_Piece.X)
                 return True
             else:
-                print("O wins!")
-                self.winner = Game_Piece.O
+                self.get_winner(board, Game_Piece.O)
                 return True
-        return False
+        else:
+            if pieces["X"] == 0:
+                self.get_winner(board, Game_Piece.O)
+                return True
+            elif pieces["O"] == 0:
+                self.get_winner(board, Game_Piece.X)
+                return True
 
     def check_direction(self, board: Board, move: tuple, direction: tuple, player: Players) -> bool:
         """Checks if the move is valid in a certain direction
@@ -102,7 +88,7 @@ class Game_Rules:
             mat_pos = board.mat[x][y]
             if mat_pos != player.game_piece:
                 if mat_pos == board.EMPTY_CELL:
-                    return False
+                    break
                 else:
                     # run a loop to check if there is another piece of the player in the direction
                     while True:
@@ -114,9 +100,9 @@ class Game_Rules:
                         if mat_pos == player.game_piece:
                             return True
                         elif mat_pos == board.EMPTY_CELL:
-                            return False
+                            break
                         else:
-                            return True
+                            continue
 
             if mat_pos == player.game_piece:
                 return False
@@ -164,7 +150,7 @@ class Game_Rules:
                         elif mat_pos == board.EMPTY_CELL:
                             return False
                         else:
-                            return True
+                            continue
 
             if mat_pos == player.game_piece:
                 return False
@@ -186,8 +172,26 @@ class Game_Rules:
                 break
             mat_pos = board.mat[x][y]
             if mat_pos == player.game_piece:
-                continue
+                break
             if mat_pos == board.EMPTY_CELL:
                 break
             board.flip_game_piece(player.game_piece, (x, y))
 
+    def get_valid_moves(self, board: Board, player: Players) -> list:
+        """Gets all the valid moves for the player
+        Returns:
+            list: A list of valid moves
+        """
+        valid_moves = []
+        for x in range(board.size):
+            for y in range(board.size):
+                if self.is_valid_move(board, (x, y), player):
+                    valid_moves.append((x, y))
+        return valid_moves
+
+    def get_winner(self, winner) -> Game_Piece:
+        """Gets the winner of the game
+        Returns:
+            Game_Piece: The winner of the game
+        """
+        return f'No more moves, the winner is {winner}'

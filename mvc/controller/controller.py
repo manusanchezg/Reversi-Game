@@ -29,23 +29,32 @@ class StartGame:
 
         while True:
             # not very scalable, but it works
-            if not self.game_rules.is_game_over(self.board):
+            BoardConsoleView(self.board).draw()
+            if not self.game_rules.is_game_over(self.board) and \
+             self.game_rules.get_valid_moves(self.board, self.current_player):
                 player = self.current_player.player_name
-                BoardConsoleView(self.board).draw()
 
-                if type(self.current_player) != AIPlayer:
+                # if type(self.current_player) != AIPlayer:
+                if isinstance(self.current_player, HumanPlayer):
                     move = input(f"{player}, make your move (row, col): ")
                     move = tuple(map(int, move.split(",")))
                     move = move[0] - 1, move[1] - 1
                     # while the move is not valid, ask for a new move
                     while not self.game_rules.is_valid_move(self.board, move, self.current_player):
+                        print("Invalid move, please try again")
                         move = input(f"{player}, make your move (row, col): ")
                         move = tuple(map(int, move.split(",")))
                         move = move[0] - 1, move[1] - 1
-
-                self.current_player.make_move(self.board, move)
-                self.game_rules.flip_pieces(self.board, move, self.current_player)
-                self.change_players()
+                    self.current_player.make_move(self.board, move)
+                    self.game_rules.flip_pieces(self.board, move, self.current_player)
+                    self.change_players()
+                else:
+                    move = self.current_player.get_best_move(self.board, self.current_player)
+                    self.current_player.make_move(self.board, move)
+                    self.game_rules.flip_pieces(self.board, move, self.current_player)
+                    self.change_players()
+            else:
+                break
 
     def change_players(self):
         if self.current_player == self.player1:
