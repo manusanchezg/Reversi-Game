@@ -1,10 +1,8 @@
 from mvc.model.Game_Rules import Game_Rules
-from mvc.model.Players import Players
 from mvc.view.board_console_view import BoardConsoleView
 from mvc.model.Board import Board
 from mvc.model.Game_Piece import Game_Piece
 from mvc.model.Human_Player import HumanPlayer
-from mvc.model.Game import Game
 from mvc.model.AI import AIPlayer
 
 class StartGame:
@@ -35,14 +33,15 @@ class StartGame:
                 player = self.current_player.player_name
                 BoardConsoleView(self.board).draw()
 
-                move = input(f"{player}, make your move (row, col): ")
-                move = tuple(map(int, move.split(",")))
-                move = move[0] - 1, move[1] - 1
-                # while the move is not valid, ask for a new move
-                while not self.game_rules.is_valid_move(self.board, move, self.current_player):
+                if type(self.current_player) != AIPlayer:
                     move = input(f"{player}, make your move (row, col): ")
                     move = tuple(map(int, move.split(",")))
                     move = move[0] - 1, move[1] - 1
+                    # while the move is not valid, ask for a new move
+                    while not self.game_rules.is_valid_move(self.board, move, self.current_player):
+                        move = input(f"{player}, make your move (row, col): ")
+                        move = tuple(map(int, move.split(",")))
+                        move = move[0] - 1, move[1] - 1
 
                 self.current_player.make_move(self.board, move)
                 self.game_rules.flip_pieces(self.board, move, self.current_player)

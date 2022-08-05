@@ -10,7 +10,7 @@ class Game_Rules:
                 #  down    right     up     left   down-right  up-left  down-left   up-right
     
     def __init__(self) -> None:
-        pass
+        self.winner = None
 
     def is_valid_move(self, board: Board, move: tuple, player: Players) -> bool:
         """Checks wether the move is valid or not
@@ -62,18 +62,22 @@ class Game_Rules:
             
             if pieces["X"] == 0:
                 print("No X pieces")
+                self.winner = Game_Piece.O
                 print("Game over, O wins")
             elif pieces["O"] == 0:
                 print("No O pieces")
+                self.winner = Game_Piece.X
                 print("Game over, X wins")
             if pieces["X"] == pieces["O"]:
                 print("It's a tie!")
                 return True
             elif pieces["X"] > pieces["O"]:
                 print("X wins!")
+                self.winner = Game_Piece.X
                 return True
             else:
                 print("O wins!")
+                self.winner = Game_Piece.O
                 return True
         return False
 

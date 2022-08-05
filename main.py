@@ -9,6 +9,5 @@ game_rules = Game_Rules()
 board = Board()
 
 
-
 game = StartGame(board, player1=Player1, game_rules=game_rules)
 game.start()

@@ -8,38 +8,36 @@ class AIPlayer(Players):
         super().__init__()
         self.game_piece = game_piece
         self.game_rules = Game_Rules()
+        self.player_name = "Player2"
 
-    def make_move(self, board, move: tuple):
-        pass
+    def make_move(self, board: Board, move: tuple):
+        valid_moves = self.get_valid_moves(board, self.game_piece)
+        if self.game_rules.is_valid_move(board, move, self):
+            for move in valid_moves:
+                new_board = Board(board.mat)
+                board_value = self.minimax(new_board, self.game_piece, Game_Piece.X)
+                board.set_cell(move[0], move[1], self.game_piece)
+                return board_value
         
 
 
 
-    def get_valid_moves(self, board: Board, game_rules: Game_Rules, player: Game_Piece.O):
+    def get_valid_moves(self, board: Board, player: Game_Piece.O):
+        """Gets all the valid moves for the AI
+        Returns:
+            list: contains all the valid moves
+        """
         valid_moves = []
         for i in range(board.size):
             for j in range(board.size):
-                if game_rules.is_valid_move(board, (i, j), player):
+                if self.game_rules.is_valid_move(board, (i, j), player):
                     valid_moves.append((i, j))
         return valid_moves
 
-    def get_best_move(self, board: Board, game_rules: Game_Rules, player: Game_Piece.O):
-        valid_moves = self.get_valid_moves(board, game_rules, player)
-        best_move = -1
-        best_score = -1
-        for move in valid_moves:
-            score = self.get_move_score(board, game_rules, move, player)
-            if score > best_score:
-                best_score = score
-                best_move = move
-        return best_move
-
-    def get_move_score(self, board: Board, game_rules: Game_Rules, move: tuple, player: Game_Piece.O):
-        board.make_move(move, player)
-        if game_rules.is_game_over(board):
-            if game_rules.is_winner(board, player):
-                return 1
-            else:
-                return 0
+    def minimax(self, board, max_player, min_player):
+        if self.game_rules.is_game_over(board):
+            return self.game_rules.winner
+        if max_player == Game_Piece.X:
+            return self.max_value(board, max_player, min_player)
         else:
-            return self.get_best_move(board, game_rules, player)
+            return self.min_value(board, max_player, min_player)
