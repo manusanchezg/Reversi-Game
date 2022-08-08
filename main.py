@@ -6,7 +6,7 @@ from mvc.model.Game_Rules import Game_Rules
 
 Player1 = HumanPlayer(Game_Piece.X)
 game_rules = Game_Rules()
-board = Board()
+board = Board(4)
 
 
 game = StartGame(board, player1=Player1, game_rules=game_rules)

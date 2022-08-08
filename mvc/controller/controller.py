@@ -4,6 +4,7 @@ from mvc.model.Board import Board
 from mvc.model.Game_Piece import Game_Piece
 from mvc.model.Human_Player import HumanPlayer
 from mvc.model.AI import AIPlayer
+from mvc.model.Advanced_AI import AdvancedAIPlayer
 
 class StartGame:
     def __init__(self, board: Board, player1: HumanPlayer, game_rules: Game_Rules):
@@ -14,10 +15,11 @@ class StartGame:
 
     def start(self):
         # set the board to it's initial state
-        self.board.set_cell(3, 4, Game_Piece.X)
-        self.board.set_cell(4, 3, Game_Piece.X)
-        self.board.set_cell(4, 4, Game_Piece.O)
-        self.board.set_cell(3, 3, Game_Piece.O)
+        middle = self.board.size // 2
+        self.board.set_cell(middle - 1, middle, Game_Piece.X)
+        self.board.set_cell(middle, middle - 1, Game_Piece.X)
+        self.board.set_cell(middle, middle, Game_Piece.O)
+        self.board.set_cell(middle - 1, middle - 1, Game_Piece.O)
 
         # The player choose if they want to play against a computer or another player
         # Player 1 is always human
@@ -26,9 +28,12 @@ class StartGame:
             self.player2 = HumanPlayer(Game_Piece.O)
         if player == "2":
             self.player2 = AIPlayer(Game_Piece.O)
+        if player == "3":
+            choice = BoardConsoleView(self.board).display_choose_difficulty()
+            self.player2 = AdvancedAIPlayer(Game_Piece.O, choice)
 
         while True:
-            # not very scalable, but it works
+            # infinite loops that ends when the game is over
             BoardConsoleView(self.board).draw()
             if not self.game_rules.is_game_over(self.board) and \
              self.game_rules.get_valid_moves(self.board, self.current_player):
@@ -54,7 +59,7 @@ class StartGame:
                     self.game_rules.flip_pieces(self.board, move, self.current_player)
                     self.change_players()
             else:
-                break
+                self.game_rules.get_winner()
 
     def change_players(self):
         if self.current_player == self.player1:

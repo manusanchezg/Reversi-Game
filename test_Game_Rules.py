@@ -3,8 +3,6 @@ from mvc.model.Game_Rules import Game_Rules
 from mvc.model.Board import Board
 from mvc.model.Game_Piece import Game_Piece
 from mvc.model.Human_Player import HumanPlayer
-from mvc.model.Errors import InvalidMoveError
-from mvc.model.Errors import InvalidCoordRangeStepError
 
 
 class TestGameRules(unittest.TestCase):
@@ -25,7 +23,6 @@ class TestGameRules(unittest.TestCase):
         self.assertFalse(self.game_rules.is_valid_move(self.board, (4, 5), self.player2))
         self.assertTrue(self.game_rules.is_valid_move(self.board, (3, 5), self.player2))
 
-        # self.assertRaises(InvalidCoordRangeStepError, self.game_rules.is_valid_move, self.board, (8, 8), self.player2)
     
     def test_is_game_over(self):
         self.setUp()

@@ -31,6 +31,11 @@ class BoardConsoleView(BoardView):
         print("Please choose a player:")
         print("1. Human Player")
         print("2. Computer Player (easy)")
-        # print("3. Computer Player (hard)")
+        print("3. Computer Player (hard)")
+        choice = input("Your choice: ")
+        return choice
+
+    def display_choose_difficulty(self):
+        print("Please choose a difficulty (the higher the number, the higher the diffculty): ")
         choice = input("Your choice: ")
         return choice

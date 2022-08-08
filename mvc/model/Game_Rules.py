@@ -9,7 +9,7 @@ class Game_Rules:
                 #  down    right     up     left   down-right  up-left  down-left   up-right
     
     def __init__(self) -> None:
-        pass
+        self.winner = None
 
     def is_valid_move(self, board: Board, move: tuple, player: Players) -> bool:
         """Checks wether the move is valid or not
@@ -20,11 +20,12 @@ class Game_Rules:
             bool: True if the move is valid, False otherwise
         """
         # position in the matrix given by the user
-        mat_pos = board.mat[move[0]][move[1]]
+        x, y = move
+        if not (0 <= x < board.size and 0 <= y < board.size):
+            return False
+        mat_pos = board.mat[x][y]
 
         if mat_pos != board.EMPTY_CELL:
-            return False
-        if not (0 <= move[0] < board.size and 0 <= move[1] < board.size):
             return False
 
         # check if the move is valid in all directions
@@ -54,17 +55,21 @@ class Game_Rules:
                 print("It's a tie!")
                 return True
             elif pieces["X"] > pieces["O"]:
-                self.get_winner(board, Game_Piece.X)
+                self.winner = Game_Piece.X
+                self.get_winner()
                 return True
             else:
-                self.get_winner(board, Game_Piece.O)
+                self.winner = Game_Piece.O
+                self.get_winner()
                 return True
         else:
             if pieces["X"] == 0:
-                self.get_winner(board, Game_Piece.O)
+                self.winner = Game_Piece.O
+                self.get_winner()
                 return True
             elif pieces["O"] == 0:
-                self.get_winner(board, Game_Piece.X)
+                self.winner = Game_Piece.X
+                self.get_winner()
                 return True
 
     def check_direction(self, board: Board, move: tuple, direction: tuple, player: Players) -> bool:
@@ -189,9 +194,16 @@ class Game_Rules:
                     valid_moves.append((x, y))
         return valid_moves
 
-    def get_winner(self, winner) -> Game_Piece:
+    def get_winner(self) -> Game_Piece:
         """Gets the winner of the game
         Returns:
             Game_Piece: The winner of the game
         """
-        return f'No more moves, the winner is {winner}'
+        return f'No more moves, the winner is {self.winner}'
+
+    def evaluate_board(self, board: Board, player: Players) -> int:
+        """Evaluates the board for the player
+        Returns:
+            int: The evaluation of the board for the player
+        """
+        return 0
