@@ -34,7 +34,7 @@ class Game_Rules:
                 return True
         return False
 
-    def is_game_over(self, board: Board) -> bool:
+    def is_game_over(self, board: Board, player1: Players, player2: Players) -> bool:
         """Checks if there is any space left in the board to keep playing
         Args:
             board (Board): The board to check
@@ -55,22 +55,31 @@ class Game_Rules:
                 print("It's a tie!")
                 return True
             elif pieces["X"] > pieces["O"]:
-                self.winner = Game_Piece.X
+                self.winner = player1.player_name
                 self.get_winner()
                 return True
             else:
-                self.winner = Game_Piece.O
+                self.winner = player2.player_name
                 self.get_winner()
                 return True
         else:
             if pieces["X"] == 0:
-                self.winner = Game_Piece.O
+                self.winner = player2.player_name
                 self.get_winner()
                 return True
             elif pieces["O"] == 0:
-                self.winner = Game_Piece.X
+                self.winner = player1.player_name
                 self.get_winner()
                 return True
+            elif self.get_valid_moves(board, player1) == []:
+                print("No valid moves for X")
+                return False
+            elif self.get_valid_moves(board, player2) == []:
+                print("No valid moves for O")
+                return False
+            elif self.get_valid_moves(board, player1) == [] and self.get_valid_moves(board, player2) == []:
+                print("No valid moves for both players")
+                return False
 
     def check_direction(self, board: Board, move: tuple, direction: tuple, player: Players) -> bool:
         """Checks if the move is valid in a certain direction

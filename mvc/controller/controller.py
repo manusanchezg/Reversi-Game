@@ -35,7 +35,7 @@ class StartGame:
         while True:
             # infinite loops that ends when the game is over
             BoardConsoleView(self.board).draw()
-            if not self.game_rules.is_game_over(self.board) and \
+            if not self.game_rules.is_game_over(self.board, self.player1, self.player2) and \
              self.game_rules.get_valid_moves(self.board, self.current_player):
                 player = self.current_player.player_name
 
@@ -50,16 +50,20 @@ class StartGame:
                         move = input(f"{player}, make your move (row, col): ")
                         move = tuple(map(int, move.split(",")))
                         move = move[0] - 1, move[1] - 1
+
                     self.current_player.make_move(self.board, move)
                     self.game_rules.flip_pieces(self.board, move, self.current_player)
                     self.change_players()
+                    
                 else:
                     move = self.current_player.get_best_move(self.board, self.current_player)
                     self.current_player.make_move(self.board, move)
                     self.game_rules.flip_pieces(self.board, move, self.current_player)
                     self.change_players()
+
             else:
-                self.game_rules.get_winner()
+                print(self.game_rules.get_winner())
+                break
 
     def change_players(self):
         if self.current_player == self.player1:
