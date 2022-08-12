@@ -1,0 +1,94 @@
+@startuml Reversi
+
+package "Controller" {
+
+}
+
+
+package "Models"{
+    class Game
+    class AI
+    class Game_Piece
+    class Human_Player
+    class Board
+    class Players
+    class Directions
+    class Game_Rules
+}
+
+
+
+class Game {
+    board_size: int
+    ==
+    __init__()
+    change_player()
+    check_winner()
+    is_valid_move()
+}
+
+class Players {
+    __init__()
+    make_move()
+
+}
+
+class AI {
+    __init__()
+    make_move()
+}
+
+class Game_Piece {
+    X = 1
+    O = 2
+}
+
+class Human_Player {
+    __init__()
+    make_move()
+}
+
+class Board {
+    size: int
+    ==
+    __init__()
+    get_cell_board()
+    update_cell_board()
+}
+
+package "Views" {
+    class Console_View
+}
+
+class Console_View {
+
+}
+
+class Directions {
+    UP = 1
+    UP-RIGHT = 2
+    RIGHT = 3
+    DOWN = 4
+    DOWN-RIGHT = 5
+    LEFT = 6
+    LEFT-UP = 7
+    RIGHT = 8
+}
+
+class Game_Rules {
+    __init__()
+    is_game_over()
+    is_valid_move()
+    change_pieces()
+}
+
+
+Views "1" *-- "1" Controller.Controller_view : contains
+Models "1" *-- "1" Controller.Controller_view : contains
+Players "many" --* "1" Human_Player : contains
+Players "many" --* "1" AI : contains
+Board "1" --o "many" Game_Piece : have
+Game - Board : uses
+Game -- Players : uses
+Game -- Game_Rules : uses
+Game_Rules -- Directions
